@@ -7,7 +7,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(SolutionDir)lib/**" LinkBase="lib/" CopyToOutputDirectory="Always"/>
+        <Content Include="$(SolutionDir)lib/" Pack="true" PackageCopyToOutput="true">
+            <PackagePath>content/any/any/lib/;contentFiles/any/any/lib/</PackagePath>
+        </Content>
+    </ItemGroup>
 
 </Project>
