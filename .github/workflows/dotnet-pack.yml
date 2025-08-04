@@ -15,6 +15,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Build GLPK
+      run: bash util/build_glpk.sh
     - name: Add NuGet Source
       run: dotnet nuget add source --name unimz "https://nuget.pkg.github.com/unimz/index.json"
     - name: Build Solution
