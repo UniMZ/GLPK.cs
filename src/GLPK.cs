@@ -13,15 +13,30 @@ public static partial class GLPK
         if (name == "GLPK")
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                dist = "x86_64-linux-gnu";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-                dist = "aarch64-apple-darwin";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && 
-                (RuntimeInformation.ProcessArchitecture == Architecture.X64 || 
-                 RuntimeInformation.ProcessArchitecture == Architecture.X86))
-                dist = "x86_64-apple-darwin";
+            {
+                dist = RuntimeInformation.ProcessArchitecture switch
+                {
+                    Architecture.X64 => "x86_64-linux-gnu",
+                    _ => dist
+                };
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                dist = RuntimeInformation.ProcessArchitecture switch
+                {
+                    Architecture.X64 => "x86_64-apple-darwin",
+                    Architecture.Arm64 => "aarch64-apple-darwin",
+                    _ => dist
+                };
+            }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                dist = "x86_64-w64-mingw32";
+            {
+                dist = RuntimeInformation.ProcessArchitecture switch
+                {
+                    Architecture.X64 => "x86_64-w64-mingw32",
+                    _ => dist
+                };
+            }
             return NativeLibrary.Load($"lib/GLPK-{dist}/lib/libglpk", assembly, path);
         }
         return IntPtr.Zero;
